@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
@@ -45,10 +44,8 @@ class PdfUtils {
       // Fermer le document
       document.dispose();
 
-      print("📄 PDF modifié et sauvegardé ici : ${file.path}");
       return file.path; // Retourne le chemin du fichier
     } catch (e) {
-      print("⚠️ Erreur lors de la modification du PDF : $e");
       return "";
     }
   }

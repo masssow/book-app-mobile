@@ -41,20 +41,41 @@ dependencies:
   syncfusion_flutter_pdf: ^28.2.12
   path_provider: ^2.0.15
   google_fonts: ^6.2.1
-  # flutter_native_splash: ^2.4.5
+  flutter_html: ^3.0.0
+  just_audio: ^0.10.1
+
+
  
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.5
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+    image_path: "assets/logo_KhoratoulApp.png"
+    android: true
+    ios: true
+    remove_alpha_ios: true
+
+
+flutter_native_splash:
+  image: assets/logo_KhoratoulApp.png
+  color: "#ffffff"
+  fullscreen: true
+  android: true
+  ios: true
+  android_gravity: center
+  ios_content_mode: scaleAspectFit
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,6 +92,12 @@ flutter:
   assets:
     - assets/mon_livre.json
     - assets/bg_home.jpg
+    - lib/chapters/
+    - lib/audio/
+    - assets/logo_xu.png
+    - assets/fullLogoMass.png
+    - assets/nouroulHoudaLogo.png
+    - assets/abo.jpg
 
 
   #   - images/a_dot_ham.jpeg

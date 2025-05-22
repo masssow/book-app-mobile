@@ -1,0 +1,192 @@
+# 📚 Documentation du projet Muslim Book Reader
+
+## 📦 Structure du projet
+
+lib/
+├── data/
+│   └── chapters.dart            # Liste des chapitres (titre + fichier)
+├── models/
+│   └── (bientôt) learning_item.dart  # Modèle pour Mon Apprentissage (future)
+├── pages/
+│   ├── home_page.dart           # Page d'accueil principale
+│   ├── chapter_list_page.dart   # Liste des chapitres
+│   ├── reader_page.dart         # Lecture des chapitres HTML + navigation
+│   ├── (bientôt) learning_page.dart  # Mon Apprentissage (future)
+│   ├── (bientôt) quiz_page.dart      # Quiz de révision (future)
+├── chapters/
+│   └── *.html                   # Fichiers HTML des chapitres
+├── audio/
+│   └── *.mp3 (prévu)             # Fichiers audio pour lecture (future)
+```
+
+🖼️ Design et couleurs
+
+- 🎨 Couleur principale : **Fond vert foncé** `Color.fromRGBO(13, 31, 28, 1)`
+- 🎨 Couleur secondaire (dorée) : `Color.fromRGBO(185, 151, 91, 1)`
+- 📜 Texte principal : **Blanc** et **Blanc translucide**
+- ✨ Style HTML :
+  - `<h1>` vert clair centré
+  - `<h2>` vert un peu plus foncé
+  - `<b>` doré et gras
+
+## 📑 Fonctionnalités actuelles
+
+- ✅ Page d'accueil (HomePage) avec image en arrière-plan
+- ✅ Drawer (menu burger) :
+  - Les pratiques (chapitres)
+  - Contact
+  - Paramètres
+- ✅ Liste des chapitres (ChapterListPage)
+- ✅ Navigation fluide entre chapitres : Chapitre précédent / suivant
+- ✅ Scroll vertical pour lecture
+- ✅ HTML riche affiché avec `flutter_html`
+- ✅ Gestion de l'absence de fichier HTML avec message d'erreur
+
+## 🚀 Fonctionnalités à venir
+
+- 📖 **Mon Apprentissage** :
+  - Tap sur `<b>` : Ajouter mot ou phrase à sa liste d'apprentissage
+  - Stockage local (`shared_preferences`)
+  - Visualisation de la liste
+
+- 🧠 **Quiz interactif** :
+  - Générer quiz sur base des items ajoutés dans Mon Apprentissage
+  - Répondre et obtenir un score
+
+- 🎧 **Lecture audio** :
+  - Bouton Play pour écouter la version audio du chapitre
+  - Utilisation de `just_audio`
+
+## 📋 Packages utilisés
+
+- `flutter_html` : affichage HTML riche
+- `shared_preferences` (prévu) : stockage local apprentissage
+- `just_audio` (prévu) : lecture fichiers mp3
+
+## ⚙️ Compatibilité
+
+- ✅ Android
+- ✅ iOS
+
+
+---
+
+# 📈 Prochaines étapes immédiates
+
+| Priorité | Tâche                          | État     |
+|----------|---------------------------------|----------|
+| 1        | Ajouter "Mon Apprentissage"     | 🔜 Bientôt |
+| 2        | Ajouter "Quiz"                  | 🔜 Bientôt |
+| 3        | Ajouter audio Play chapitre     | 🔜 Bientôt |
+
+
+# 🙌 Bravo pour cette excellente base posée !
+
+Prochain step : **développement de la fonctionnalité Mon Apprentissage** avec popup interactif 🎯
+
+
+
+
+
+
+
+
+
+# 📚 Documentation Technique - Muslim Book Reader
+
+## 📦 Architecture du projet Flutter
+
+```
+lib/
+├── data/
+│   └── chapters.dart          # Liste statique des chapitres (titre + fichier HTML)
+├── models/
+│   └── (prévu) learning_item.dart  # Modèle pour apprentissage utilisateur
+├── pages/
+│   ├── home_page.dart         # Accueil avec menu Drawer
+│   ├── chapter_list_page.dart # Liste interactive des chapitres
+│   ├── reader_page.dart       # Lecture chapitre HTML + Navigation
+│   ├── (prévu) learning_page.dart # Liste d'apprentissage utilisateur
+│   ├── (prévu) quiz_page.dart      # Quiz basé sur apprentissage
+├── chapters/
+│   └── *.html                 # Contenu riche de chaque chapitre
+├── audio/
+│   └── *.mp3 (prévu)           # Audio pour chaque chapitre
+```
+
+## 🖌️ Design et UI
+
+- **Couleurs principales :**
+  - Fond général : `Color.fromRGBO(13, 31, 28, 1)` (vert sombre)
+  - Accent : `Color.fromRGBO(185, 151, 91, 1)` (doré)
+- **Police principale :**
+  - Couleur blanche pour lecture facile
+  - Corps de texte lisible et espacé (`lineHeight` amélioré)
+- **Composants Flutter standards utilisés :**
+  - AppBar, Drawer, ListView, ListTile, ExpansionTile
+  - Stack + Opacity pour arrière-plan image
+
+
+## 🛠️ Détails techniques réalisés
+
+- **HTML rendering**
+  - Utilisation du package `flutter_html`
+  - Balises `<h1>`, `<h2>`, `<b>`, `<p>` stylisées individuellement
+  - Chargement dynamique de fichiers `.html` avec `rootBundle.loadString`
+
+- **Navigation entre chapitres**
+  - Gestion d'un index `index` pour savoir où se trouve l'utilisateur
+  - Boutons `Chapitre précédent` / `Chapitre suivant` en bas de page
+  - Navigation avec `Navigator.pushReplacement` pour éviter accumulation dans la stack
+
+- **Menu Drawer dynamique**
+  - Listage automatique des chapitres
+  - Génération des ListTile depuis `chapters.dart`
+
+- **Compatibilité iOS & Android**
+  - Aucune dépendance plateforme spécifique
+  - `flutter_html`, `shared_preferences`, `just_audio` sont multiplateformes
+
+
+## 📋 Packages Flutter utilisés
+
+| Package            | Rôle                            |
+|--------------------|----------------------------------|
+| flutter_html       | Affichage HTML customisé         |
+| shared_preferences | Stockage local apprentissage (prévu) |
+| just_audio         | Lecture audio mp3 (prévu)        |
+
+
+## 🚀 Fonctionnalités prêtes
+
+- Page d'accueil stylisée avec image en background
+- Liste de chapitres dynamique
+- Lecture de chapitres HTML depuis fichiers locaux
+- Navigation entre chapitres précédente/suivante
+- Menu Drawer ergonomique
+
+
+## 🔮 Fonctionnalités futures planifiées
+
+| Fonctionnalité          | Statut         | Détail |
+|--------------------------|----------------|--------|
+| Mon Apprentissage        | 🔜 À développer | Sélection de contenu `<b>` |
+| Quiz basé sur l'apprentissage | 🔜 À développer | Générer questions/réponses |
+| Lecture Audio chapitre   | 🔜 À développer | Play/Pause audio local |
+
+
+## 📈 Observations techniques
+
+- Gestion des erreurs en cas de fichier manquant (affiche "Chapitre introuvable")
+- Utilisation de Stack pour superposer image de fond et contenus sans conflit de scroll
+- Responsive sur toutes tailles d'écran Flutter
+
+
+---
+
+# 🎯 Résumé
+
+La base actuelle est solide, propre, évolutive.  
+Le projet est prêt pour intégrer les modules avancés : apprentissage, quiz et audio.
+
+Prochaine étape : **implémenter Mon Apprentissage sur clic balises `<b>`** ✨
