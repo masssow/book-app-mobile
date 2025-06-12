@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Opacity(
             opacity: 0.2,
-            child: Image.asset('assets/bg_home.jpg', fit: BoxFit.cover),
+            child: Image.asset('assets/images/bg_home.jpg', fit: BoxFit.cover),
           ),
           Padding(
             padding: const EdgeInsets.all(24.0),
@@ -281,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Column(
                           children: [
-                            Image.asset('assets/fullLogoMass.png', width: 34),
+                            Image.asset('assets/images/fullLogoMass.png', width: 34),
                             const SizedBox(height: 4),
                             const Text(
                               'Conçue par : Massgrafik',
@@ -296,7 +296,7 @@ class _HomePageState extends State<HomePage> {
                         Column(
                           children: [
                             Image.asset(
-                              'assets/nouroulHoudaLogo.png',
+                              'assets/images/nouroulHoudaLogo.png',
                               width: 34,
                             ),
                             const SizedBox(height: 4),

@@ -44,7 +44,7 @@ class _ReaderPageState extends State<ReaderPage> {
   Future<void> loadHtml() async {
     try {
       final data = await rootBundle.loadString(
-        'lib/chapters/${widget.fileName}.html',
+        'assets/chapters/${widget.fileName}.html',
       );
       setState(() => content = data);
     } catch (e) {

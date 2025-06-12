@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.0+9
 
 environment:
   sdk: ^3.7.2
@@ -56,14 +56,14 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
-    image_path: "assets/logo_KhoratoulApp.png"
+    image_path: "assets/images/logo_KhoratoulApp.png"
     android: true
     ios: true
     remove_alpha_ios: true
 
 
 flutter_native_splash:
-  image: assets/logo_KhoratoulApp.png
+  image: assets/images/logo_KhoratoulApp.png
   color: "#ffffff"
   fullscreen: true
   android: true
@@ -90,14 +90,13 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/mon_livre.json
-    - assets/bg_home.jpg
-    - lib/chapters/
-    - lib/audio/
-    - assets/logo_xu.png
-    - assets/fullLogoMass.png
-    - assets/nouroulHoudaLogo.png
-    - assets/abo.jpg
+    - assets/images/bg_home.jpg
+    - assets/chapters/
+    - assets/audio/
+    - assets/images/logo_xu.png
+    - assets/images/fullLogoMass.png
+    - assets/images/nouroulHoudaLogo.png
+    - assets/images/abo.jpg
 
 
   #   - images/a_dot_ham.jpeg

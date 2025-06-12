@@ -1,4 +1,4 @@
-package com.example.ax_reader
+package com.khouratoul.app
 
 import io.flutter.embedding.android.FlutterActivity
 
