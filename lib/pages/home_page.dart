@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       lastFile = prefs.getString('last_read_file');
       lastTitle = prefs.getString('last_read_title');
       lastIndex = prefs.getInt('last_read_index');
-      print('[LOAD] $lastFile / $lastTitle / $lastIndex');
+     
     });
   }
 
