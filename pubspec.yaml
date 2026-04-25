@@ -1,5 +1,5 @@
 name: ax_reader
-description: "A new Flutter project."
+description: "Khouratoul Ayni BookApp project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+9
+version: 1.0.0+12
 
 environment:
   sdk: ^3.7.2
@@ -34,15 +34,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  syncfusion_flutter_pdfviewer: ^28.2.12
   shared_preferences: ^2.5.3
-  device_info_plus: ^11.3.3
-  pdf: ^3.11.3
-  syncfusion_flutter_pdf: ^28.2.12
   path_provider: ^2.0.15
   google_fonts: ^6.2.1
   flutter_html: ^3.0.0
-  just_audio: ^0.10.1
+  url_launcher: ^6.1.7
 
 
  
@@ -56,20 +52,22 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
-    image_path: "assets/images/logo_KhoratoulApp.png"
+    image_path: "assets/images/splash.png"
     android: true
     ios: true
     remove_alpha_ios: true
 
 
 flutter_native_splash:
-  image: assets/images/logo_KhoratoulApp.png
+  image: assets/images/splash.png
   color: "#ffffff"
-  fullscreen: true
   android: true
   ios: true
   android_gravity: center
   ios_content_mode: scaleAspectFit
+  android_12:
+    image: assets/images/splash.png
+    color: "#ffffff"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -97,7 +95,7 @@ flutter:
     - assets/images/fullLogoMass.png
     - assets/images/nouroulHoudaLogo.png
     - assets/images/abo.jpg
-
+    - assets/images/splash.png
 
   #   - images/a_dot_ham.jpeg
 

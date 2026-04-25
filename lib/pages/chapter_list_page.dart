@@ -29,7 +29,7 @@ class ChapterListPage extends StatelessWidget {
                     MaterialPageRoute(
                       builder:
                           (_) => ReaderPage(
-                            fileName: chapterList[index]['file']!,
+                            file: chapterList[index]['file']!,
                             title: chapterList[index]['title']!,
                             chapters: chapterList,
                             index: index,

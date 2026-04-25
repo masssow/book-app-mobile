@@ -1,19 +1,20 @@
-// File: lib/pages/reader_page.dart
+// File: lib/reader/reader_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../data/chapters.dart';
+
+import '../services/storage_service.dart';
+import '../theme/app_theme.dart';
 
 class ReaderPage extends StatefulWidget {
-  final String fileName;
+  final String file;
   final String title;
   final List<Map<String, String>> chapters;
   final int index;
 
   const ReaderPage({
     super.key,
-    required this.fileName,
+    required this.file,
     required this.title,
     required this.chapters,
     required this.index,
@@ -25,65 +26,54 @@ class ReaderPage extends StatefulWidget {
 
 class _ReaderPageState extends State<ReaderPage> {
   String content = '';
-  List<String> learningItems = [];
 
   @override
   void initState() {
     super.initState();
-    print('[INIT ACTIVE] ReaderPage dans dossier /reader/ appelé avec:');
+    _loadHtml();
 
-    print(
-      '[INIT] ReaderPage: ${widget.fileName}, ${widget.title}, ${widget.index}',
+    // Sauvegarde position lecture
+    StorageService.saveLastRead(
+      file: widget.file,
+      title: widget.title,
+      index: widget.index,
     );
-
-    loadHtml();
-    loadLearningItems();
-    saveLastReadPosition();
   }
 
-  Future<void> loadHtml() async {
+  Future<void> _loadHtml() async {
     try {
       final data = await rootBundle.loadString(
-        'assets/chapters/${widget.fileName}.html',
+        'assets/chapters/${widget.file}.html',
       );
-      setState(() => content = data);
+
+      if (mounted) {
+        setState(() => content = data);
+      }
     } catch (e) {
-      setState(() => content = '<p><b>Erreur :</b> chapitre introuvable.</p>');
+      if (mounted) {
+        setState(() {
+          content = '<p><b>Erreur :</b> chapitre introuvable.</p>';
+        });
+      }
     }
   }
 
-  Future<void> loadLearningItems() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      learningItems = prefs.getStringList('learning') ?? [];
-    });
-  }
+  Future<void> _addToLearning(String text) async {
+    await StorageService.addLearning(text);
 
-  Future<void> saveLastReadPosition() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('last_read_file', widget.fileName);
-    await prefs.setString('last_read_title', widget.title);
-    await prefs.setInt('last_read_index', widget.index);
-print(
-      '[SAVE TEST] Enregistrement : ${widget.title} (${widget.fileName}) @${widget.index}',
-    );
-  }
+    if (!mounted) return;
 
-  Future<void> addToLearning(String text) async {
-    final prefs = await SharedPreferences.getInstance();
-    learningItems.add(text);
-    await prefs.setStringList('learning', learningItems);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text('Ajouté à Mon Apprentissage 📖'),
-        backgroundColor: Colors.green.shade700,
-        duration: const Duration(seconds: 2),
+        backgroundColor: AppTheme.accentGreen,
         behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
       ),
     );
   }
 
-  void showLearningDialog(String text) {
+  void _showLearningDialog(String text) {
     showDialog(
       context: context,
       builder:
@@ -91,30 +81,30 @@ print(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            backgroundColor: Colors.white.withOpacity(0.95),
+            backgroundColor: Colors.white.withValues(alpha: 0.95),
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                     'Ajouter à Mon Apprentissage ?',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: const Color.fromRGBO(13, 31, 28, 1),
+                      color: AppTheme.background,
                     ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.pop(context);
-                      addToLearning(text);
+                      _addToLearning(text);
                     },
                     icon: const Icon(Icons.bookmark_add_outlined),
                     label: const Text('Ajouter à Mon Apprentissage'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromRGBO(185, 151, 91, 1),
+                      backgroundColor: AppTheme.gold,
                       foregroundColor: Colors.black,
                       minimumSize: const Size(double.infinity, 50),
                     ),
@@ -123,6 +113,23 @@ print(
               ),
             ),
           ),
+    );
+  }
+
+  void _navigateTo(int newIndex) {
+    final chapter = widget.chapters[newIndex];
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder:
+            (_) => ReaderPage(
+              file: chapter['file']!,
+              title: chapter['title']!,
+              chapters: widget.chapters,
+              index: newIndex,
+            ),
+      ),
     );
   }
 
@@ -136,7 +143,7 @@ print(
           content.isEmpty
               ? const Center(child: CircularProgressIndicator())
               : Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     Text(
@@ -153,26 +160,18 @@ print(
                               tagsToExtend: {'span'},
                               builder: (context) {
                                 final id = context.attributes['id'];
-                                final rawText = context.element?.text ?? '';
-                                if (id != null) {
+                                final rawText =
+                                    context.element?.text.trim() ?? '';
+
+                                if (id != null && rawText.isNotEmpty) {
                                   return GestureDetector(
-                                    onTap: () => showLearningDialog(rawText),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 2,
-                                      ),
-                                      child: Text(
-                                        rawText,
-                                        style: const TextStyle(
-                                          color: Color.fromRGBO(
-                                            185,
-                                            151,
-                                            91,
-                                            1,
-                                          ),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
+                                    onTap: () => _showLearningDialog(rawText),
+                                    child: Text(
+                                      rawText,
+                                      style: const TextStyle(
+                                        color: AppTheme.gold,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
                                       ),
                                     ),
                                   );
@@ -181,21 +180,20 @@ print(
                               },
                             ),
                           ],
-                          
                           style: {
                             "h1": Style(
-                              color: Colors.greenAccent,
+                              color: AppTheme.accentGreenLight,
                               fontSize: FontSize(24),
                               fontWeight: FontWeight.bold,
                               textAlign: TextAlign.center,
                             ),
                             "h2": Style(
-                              color: Colors.green,
+                              color: AppTheme.accentGreen,
                               fontSize: FontSize(20),
                               fontWeight: FontWeight.w600,
                             ),
                             "b": Style(
-                              color: const Color.fromRGBO(185, 151, 91, 1),
+                              color: AppTheme.gold,
                               fontWeight: FontWeight.bold,
                               fontSize: FontSize(14),
                             ),
@@ -205,13 +203,13 @@ print(
                               fontSize: FontSize(14),
                             ),
                             "p": Style(
-                              color: Colors.white,
+                              color: AppTheme.textPrimary,
                               fontSize: FontSize(14),
                               lineHeight: LineHeight(1.5),
                             ),
                             "body": Style(
                               fontSize: FontSize(14),
-                              color: Colors.white,
+                              color: AppTheme.textPrimary,
                             ),
                           },
                         ),
@@ -224,44 +222,14 @@ print(
                         TextButton(
                           onPressed:
                               widget.index > 0
-                                  ? () {
-                                    final prev =
-                                        widget.chapters[widget.index - 1];
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (_) => ReaderPage(
-                                              fileName: prev['file']!,
-                                              title: prev['title']!,
-                                              chapters: widget.chapters,
-                                              index: widget.index - 1,
-                                            ),
-                                      ),
-                                    );
-                                  }
+                                  ? () => _navigateTo(widget.index - 1)
                                   : null,
                           child: const Text('Chapitre précédent'),
                         ),
                         TextButton(
                           onPressed:
                               widget.index < widget.chapters.length - 1
-                                  ? () {
-                                    final next =
-                                        widget.chapters[widget.index + 1];
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (_) => ReaderPage(
-                                              fileName: next['file']!,
-                                              title: next['title']!,
-                                              chapters: widget.chapters,
-                                              index: widget.index + 1,
-                                            ),
-                                      ),
-                                    );
-                                  }
+                                  ? () => _navigateTo(widget.index + 1)
                                   : null,
                           child: const Text('Chapitre suivant'),
                         ),

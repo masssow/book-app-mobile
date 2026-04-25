@@ -18,7 +18,6 @@ class HtmlPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Html(
           data: htmlContent,
-          extensions: [const AssetHtmlExtension()],
         ),
       ),
     );
